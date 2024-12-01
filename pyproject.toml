@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "webscraping"
+version = "0.1.0"
+description = "Web scraping project using AgentQL and Playwright"
+authors = ["Brandon Braner <brandon.braner@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+agentql = "*"
+playwright = "^1.39.0"
+polars = "^1.16.0"
+xlsxwriter = "^3.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
