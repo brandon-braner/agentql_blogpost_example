@@ -40,6 +40,8 @@ dist/
 *.swo
 .DS_Store
 
+# Output Files
+output.xlsx
 
 # Logs
 *.log

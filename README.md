@@ -32,6 +32,11 @@ Run the scraping script:
 poetry run python main.py
 ```
 
+To Run the tests:
+```bash
+poetry run pytest
+```
+
 ## Project Structure
 
 - `main.py`: Main scraping script

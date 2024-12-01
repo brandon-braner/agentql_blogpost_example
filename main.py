@@ -6,6 +6,11 @@ import agentql
 from agentql.ext.playwright.sync_api import Page
 from playwright.sync_api import sync_playwright
 import polars as pl
+from pydantic import BaseModel
+from typing import List
+
+
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -13,6 +18,15 @@ log = logging.getLogger(__name__)
 # Set the URL to the desired website
 URL = "https://webscraper.io/test-sites/e-commerce/allinone"
 
+
+class Product(BaseModel):
+    product_name: str
+    product_price: float
+    product_description: str
+
+
+class ProductList(BaseModel):
+    products: List[Product]
 
 def main():
     with sync_playwright() as p, p.chromium.launch(headless=False) as browser:
@@ -43,9 +57,19 @@ def get_response(page: Page):
 
     return page.query_data(query)
 
-def write_response_to_xlsx(data, filename:str = "output.xlsx"):
-    df = pl.DataFrame(data)
+def write_response_to_xlsx(data: List[dict], filename: str = "output.xlsx"):
+    # Validate data using Pydantic models
+    log.info("Validating data with Product model...")
+    validated_products = [Product(**item).model_dump() for item in data]
+    
+    # Convert validated data to DataFrame
+    log.info("Converting validated data to DataFrame...")
+    df = pl.DataFrame(validated_products)
+    
+    log.info(f"Writing data to {filename}...")
     df.write_excel(filename)
+    log.info("Data written successfully!")
+
 
 if __name__ == "__main__":
     main()
